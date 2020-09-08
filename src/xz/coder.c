@@ -164,7 +164,7 @@ coder_set_compression_settings(void)
 		}
 
 		// Get the preset for LZMA1 or LZMA2.
-		if (lzma_lzma_preset(&opt_lzma, preset_number))
+		if (bcc_lzma_lzma_preset(&opt_lzma, preset_number))
 			message_bug();
 
 		// Use LZMA2 except with --format=lzma we use LZMA1.
@@ -456,7 +456,7 @@ coder_init(file_pair *pair)
 			break;
 
 		case FORMAT_LZMA:
-			ret = lzma_alone_encoder(&strm, filters[0].options);
+			ret = bcc_lzma_alone_encoder(&strm, filters[0].options);
 			break;
 
 		case FORMAT_RAW:
@@ -526,7 +526,7 @@ coder_init(file_pair *pair)
 			break;
 
 		case FORMAT_LZMA:
-			ret = lzma_alone_decoder(&strm,
+			ret = bcc_lzma_alone_decoder(&strm,
 					hardware_memlimit_get(
 						MODE_DECOMPRESS));
 			break;
@@ -545,7 +545,7 @@ coder_init(file_pair *pair)
 		if (ret == LZMA_OK && init_format != FORMAT_RAW) {
 			strm.next_out = NULL;
 			strm.avail_out = 0;
-			ret = lzma_code(&strm, LZMA_RUN);
+			ret = bcc_lzma_code(&strm, LZMA_RUN);
 		}
 #endif
 	}
@@ -702,7 +702,7 @@ coder_normal(file_pair *pair)
 		}
 
 		// Let liblzma do the actual work.
-		ret = lzma_code(&strm, action);
+		ret = bcc_lzma_code(&strm, action);
 
 		// Write out if the output buffer became full.
 		if (strm.avail_out == 0) {
@@ -930,7 +930,7 @@ coder_run(const char *filename)
 extern void
 coder_free(void)
 {
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 	return;
 }
 #endif

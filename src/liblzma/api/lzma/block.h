@@ -25,7 +25,7 @@
  * members listed for reading need to be initialized when the specified
  * functions are called. The members marked for writing will be assigned
  * new values at some point either by calling the given function or by
- * later calls to lzma_code().
+ * later calls to bcc_lzma_code().
  */
 typedef struct {
 	/**
@@ -118,7 +118,7 @@ typedef struct {
 	 *  - Call lzma_block_header_size() to see how much space you need to
 	 *    reserve for the Block Header.
 	 *
-	 *  - Encode the Block using lzma_block_encoder() and lzma_code().
+	 *  - Encode the Block using lzma_block_encoder() and bcc_lzma_code().
 	 *    It sets compressed_size to the correct value.
 	 *
 	 *  - Use lzma_block_header_encode() to encode the Block Header.
@@ -441,10 +441,10 @@ extern LZMA_API(lzma_vli) lzma_block_total_size(const lzma_block *block)
 /**
  * \brief       Initialize .xz Block encoder
  *
- * Valid actions for lzma_code() are LZMA_RUN, LZMA_SYNC_FLUSH (only if the
+ * Valid actions for bcc_lzma_code() are LZMA_RUN, LZMA_SYNC_FLUSH (only if the
  * filter chain supports it), and LZMA_FINISH.
  *
- * \return      - LZMA_OK: All good, continue with lzma_code().
+ * \return      - LZMA_OK: All good, continue with bcc_lzma_code().
  *              - LZMA_MEM_ERROR
  *              - LZMA_OPTIONS_ERROR
  *              - LZMA_UNSUPPORTED_CHECK: block->check specifies a Check ID
@@ -460,10 +460,10 @@ extern LZMA_API(lzma_ret) lzma_block_encoder(
 /**
  * \brief       Initialize .xz Block decoder
  *
- * Valid actions for lzma_code() are LZMA_RUN and LZMA_FINISH. Using
+ * Valid actions for bcc_lzma_code() are LZMA_RUN and LZMA_FINISH. Using
  * LZMA_FINISH is not required. It is supported only for convenience.
  *
- * \return      - LZMA_OK: All good, continue with lzma_code().
+ * \return      - LZMA_OK: All good, continue with bcc_lzma_code().
  *              - LZMA_UNSUPPORTED_CHECK: Initialization was successful, but
  *                the given Check ID is not supported, thus Check will be
  *                ignored.

@@ -16,7 +16,7 @@
 extern bool
 lzma_easy_preset(lzma_options_easy *opt_easy, uint32_t preset)
 {
-	if (lzma_lzma_preset(&opt_easy->opt_lzma, preset))
+	if (bcc_lzma_lzma_preset(&opt_easy->opt_lzma, preset))
 		return true;
 
 	opt_easy->filters[0].id = LZMA_FILTER_LZMA2;

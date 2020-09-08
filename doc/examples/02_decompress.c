@@ -72,7 +72,7 @@ init_decoder(lzma_stream *strm)
 	//
 	// Note that LZMA_MEMLIMIT_ERROR is never possible here. If you
 	// specify a very tiny limit, the error will be delayed until
-	// the first headers have been parsed by a call to lzma_code().
+	// the first headers have been parsed by a call to bcc_lzma_code().
 	const char *msg;
 	switch (ret) {
 	case LZMA_MEM_ERROR:
@@ -104,7 +104,7 @@ static bool
 decompress(lzma_stream *strm, const char *inname, FILE *infile, FILE *outfile)
 {
 	// When LZMA_CONCATENATED flag was used when initializing the decoder,
-	// we need to tell lzma_code() when there will be no more input.
+	// we need to tell bcc_lzma_code() when there will be no more input.
 	// This is done by setting action to LZMA_FINISH instead of LZMA_RUN
 	// in the same way as it is done when encoding.
 	//
@@ -136,7 +136,7 @@ decompress(lzma_stream *strm, const char *inname, FILE *infile, FILE *outfile)
 			}
 
 			// Once the end of the input file has been reached,
-			// we need to tell lzma_code() that no more input
+			// we need to tell bcc_lzma_code() that no more input
 			// will be coming. As said before, this isn't required
 			// if the LZMA_CONCATENATED flag isn't used when
 			// initializing the decoder.
@@ -144,7 +144,7 @@ decompress(lzma_stream *strm, const char *inname, FILE *infile, FILE *outfile)
 				action = LZMA_FINISH;
 		}
 
-		lzma_ret ret = lzma_code(strm, action);
+		lzma_ret ret = bcc_lzma_code(strm, action);
 
 		if (strm->avail_out == 0 || ret == LZMA_STREAM_END) {
 			size_t write_size = sizeof(outbuf) - strm->avail_out;
@@ -162,7 +162,7 @@ decompress(lzma_stream *strm, const char *inname, FILE *infile, FILE *outfile)
 
 		if (ret != LZMA_OK) {
 			// Once everything has been decoded successfully, the
-			// return value of lzma_code() will be LZMA_STREAM_END.
+			// return value of bcc_lzma_code() will be LZMA_STREAM_END.
 			//
 			// It is important to check for LZMA_STREAM_END. Do not
 			// assume that getting ret != LZMA_OK would mean that
@@ -276,7 +276,7 @@ main(int argc, char **argv)
 
 	// Free the memory allocated for the decoder. This only needs to be
 	// done after the last file.
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	if (fclose(stdout)) {
 		fprintf(stderr, "Write error: %s\n", strerror(errno));

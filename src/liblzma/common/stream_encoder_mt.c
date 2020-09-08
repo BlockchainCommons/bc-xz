@@ -70,7 +70,7 @@ struct worker_thread_s {
 
 	/// The allocator is set by the main thread. Since a copy of the
 	/// pointer is kept here, the application must not change the
-	/// allocator before calling lzma_end().
+	/// allocator before calling bcc_lzma_end().
 	const lzma_allocator *allocator;
 
 	/// Amount of uncompressed data that has already been compressed.
@@ -623,7 +623,7 @@ wait_for_work(lzma_stream_coder *coder, mythread_condtime *wait_abs,
 {
 	if (coder->timeout != 0 && !*has_blocked) {
 		// Every time when stream_encode_mt() is called via
-		// lzma_code(), *has_blocked starts as false. We set it
+		// bcc_lzma_code(), *has_blocked starts as false. We set it
 		// to true here and calculate the absolute time when
 		// we must return if there's nothing to do.
 		//
@@ -956,7 +956,7 @@ stream_encoder_mt_init(lzma_next_coder *next, const lzma_allocator *allocator,
 #endif
 
 	// Validate the filter chain so that we can give an error in this
-	// function instead of delaying it to the first call to lzma_code().
+	// function instead of delaying it to the first call to bcc_lzma_code().
 	// The memory usage calculation verifies the filter chain as
 	// a side effect so we take advatange of that.
 	if (lzma_raw_encoder_memusage(filters) == UINT64_MAX)

@@ -360,7 +360,7 @@ XZ Utils Release Notes
 
 5.0.5 (2013-06-30)
 
-    * lzmadec and liblzma's lzma_alone_decoder(): Support decompressing
+    * lzmadec and liblzma's bcc_lzma_alone_decoder(): Support decompressing
       .lzma files that have less common settings in the headers
       (dictionary size other than 2^n or 2^n + 2^(n-1), or uncompressed
       size greater than 256 GiB). The limitations existed to avoid false
@@ -422,7 +422,7 @@ XZ Utils Release Notes
           much output space as is the uncompressed size of the file.
 
         - Fix a bug in doc/examples_old/xz_pipe_decompress.c. It didn't
-          check if the last call to lzma_code() really returned
+          check if the last call to bcc_lzma_code() really returned
           LZMA_STREAM_END, which made the program think that truncated
           files are valid.
 

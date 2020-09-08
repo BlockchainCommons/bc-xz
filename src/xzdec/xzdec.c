@@ -148,7 +148,7 @@ uncompress(lzma_stream *strm, FILE *file, const char *filename)
 
 	// Initialize the decoder
 #ifdef LZMADEC
-	ret = lzma_alone_decoder(strm, UINT64_MAX);
+	ret = bcc_lzma_alone_decoder(strm, UINT64_MAX);
 #else
 	ret = lzma_stream_decoder(strm, UINT64_MAX, LZMA_CONCATENATED);
 #endif
@@ -192,7 +192,7 @@ uncompress(lzma_stream *strm, FILE *file, const char *filename)
 #endif
 		}
 
-		ret = lzma_code(strm, action);
+		ret = bcc_lzma_code(strm, action);
 
 		// Write and check write error before checking decoder error.
 		// This way as much data as possible gets written to output
@@ -316,7 +316,7 @@ main(int argc, char **argv)
 #ifndef NDEBUG
 	// Free the memory only when debugging. Freeing wastes some time,
 	// but allows detecting possible memory leaks with Valgrind.
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 #endif
 
 	tuklib_exit(EXIT_SUCCESS, EXIT_FAILURE, display_errors);

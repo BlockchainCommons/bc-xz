@@ -272,7 +272,7 @@ set_lzma(void *options, unsigned key, uint64_t value, const char *valuestr)
 				error_lzma_preset(valuestr);
 		}
 
-		if (lzma_lzma_preset(options, preset))
+		if (bcc_lzma_lzma_preset(options, preset))
 			error_lzma_preset(valuestr);
 
 		break;
@@ -346,7 +346,7 @@ options_lzma(const char *str)
 	};
 
 	lzma_options_lzma *options = xmalloc(sizeof(lzma_options_lzma));
-	if (lzma_lzma_preset(options, LZMA_PRESET_DEFAULT))
+	if (bcc_lzma_lzma_preset(options, LZMA_PRESET_DEFAULT))
 		message_bug();
 
 	parse_options(str, opts, &set_lzma, options);

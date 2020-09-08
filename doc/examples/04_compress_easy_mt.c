@@ -34,8 +34,8 @@ init_encoder(lzma_stream *strm)
 		// Let liblzma determine a sane block size.
 		.block_size = 0,
 
-		// Use no timeout for lzma_code() calls by setting timeout
-		// to zero. That is, sometimes lzma_code() might block for
+		// Use no timeout for bcc_lzma_code() calls by setting timeout
+		// to zero. That is, sometimes bcc_lzma_code() might block for
 		// a long time (from several seconds to even minutes).
 		// If this is not OK, for example due to progress indicator
 		// needing updates, specify a timeout in milliseconds here.
@@ -143,7 +143,7 @@ compress(lzma_stream *strm, FILE *infile, FILE *outfile)
 				action = LZMA_FINISH;
 		}
 
-		lzma_ret ret = lzma_code(strm, action);
+		lzma_ret ret = bcc_lzma_code(strm, action);
 
 		if (strm->avail_out == 0 || ret == LZMA_STREAM_END) {
 			size_t write_size = sizeof(outbuf) - strm->avail_out;
@@ -195,7 +195,7 @@ main(void)
 	if (success)
 		success = compress(&strm, stdin, stdout);
 
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	if (fclose(stdout)) {
 		fprintf(stderr, "Write error: %s\n", strerror(errno));

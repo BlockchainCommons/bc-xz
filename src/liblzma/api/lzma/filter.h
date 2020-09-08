@@ -168,7 +168,7 @@ extern LZMA_API(uint64_t) lzma_raw_decoder_memusage(const lzma_filter *filters)
  * \param       filters Array of lzma_filter structures. The end of the
  *                      array must be marked with .id = LZMA_VLI_UNKNOWN.
  *
- * The `action' with lzma_code() can be LZMA_RUN, LZMA_SYNC_FLUSH (if the
+ * The `action' with bcc_lzma_code() can be LZMA_RUN, LZMA_SYNC_FLUSH (if the
  * filter chain supports it), or LZMA_FINISH.
  *
  * \return      - LZMA_OK
@@ -186,7 +186,7 @@ extern LZMA_API(lzma_ret) lzma_raw_encoder(
  *
  * The initialization of raw decoder goes similarly to raw encoder.
  *
- * The `action' with lzma_code() can be LZMA_RUN or LZMA_FINISH. Using
+ * The `action' with bcc_lzma_code() can be LZMA_RUN or LZMA_FINISH. Using
  * LZMA_FINISH is not required, it is supported just for convenience.
  *
  * \return      - LZMA_OK

@@ -252,7 +252,7 @@ main(void)
 // 	test_lzma();
 // #endif
 
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	return 0;
 }

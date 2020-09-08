@@ -198,10 +198,10 @@ alone_decoder_memconfig(void *coder_ptr, uint64_t *memusage,
 
 
 extern lzma_ret
-lzma_alone_decoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
+bcc_lzma_alone_decoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 		uint64_t memlimit, bool picky)
 {
-	lzma_next_coder_init(&lzma_alone_decoder_init, next, allocator);
+	lzma_next_coder_init(&bcc_lzma_alone_decoder_init, next, allocator);
 
 	lzma_alone_coder *coder = next->coder;
 
@@ -232,9 +232,9 @@ lzma_alone_decoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 
 
 extern LZMA_API(lzma_ret)
-lzma_alone_decoder(lzma_stream *strm, uint64_t memlimit)
+bcc_lzma_alone_decoder(lzma_stream *strm, uint64_t memlimit)
 {
-	lzma_next_strm_init(lzma_alone_decoder_init, strm, memlimit, false);
+	lzma_next_strm_init(bcc_lzma_alone_decoder_init, strm, memlimit, false);
 
 	strm->internal->supported_actions[LZMA_RUN] = true;
 	strm->internal->supported_actions[LZMA_FINISH] = true;

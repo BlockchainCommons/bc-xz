@@ -177,7 +177,7 @@ lzma_index_hash_decode(lzma_index_hash *index_hash, const uint8_t *in,
 {
 	// Catch zero input buffer here, because in contrast to Index encoder
 	// and decoder functions, applications call this function directly
-	// instead of via lzma_code(), which does the buffer checking.
+	// instead of via bcc_lzma_code(), which does the buffer checking.
 	if (*in_pos >= in_size)
 		return LZMA_BUF_ERROR;
 

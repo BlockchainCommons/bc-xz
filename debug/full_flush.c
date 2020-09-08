@@ -39,7 +39,7 @@ encode(size_t size, lzma_action action)
 		strm.next_out = out;
 		strm.avail_out = CHUNK;
 
-		ret = lzma_code(&strm, size == 0 ? action : LZMA_RUN);
+		ret = bcc_lzma_code(&strm, size == 0 ? action : LZMA_RUN);
 
 		if (ret != LZMA_OK && ret != LZMA_STREAM_END) {
 			fprintf(stderr, "%s:%u: %s: ret == %d\n",
@@ -68,7 +68,7 @@ main(int argc, char **argv)
 
 	// Config
 	lzma_options_lzma opt_lzma;
-	if (lzma_lzma_preset(&opt_lzma, 1)) {
+	if (bcc_lzma_lzma_preset(&opt_lzma, 1)) {
 		fprintf(stderr, "preset failed\n");
 		exit(1);
 	}
@@ -97,7 +97,7 @@ main(int argc, char **argv)
 	encode(0, LZMA_FINISH);
 
 	// Clean up
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	return 0;
 }

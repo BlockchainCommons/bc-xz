@@ -190,7 +190,7 @@ lzma_strm_init(lzma_stream *strm)
 
 
 extern LZMA_API(lzma_ret)
-lzma_code(lzma_stream *strm, lzma_action action)
+bcc_lzma_code(lzma_stream *strm, lzma_action action)
 {
 	// Sanity checks
 	if ((strm->next_in == NULL && strm->avail_in != 0)
@@ -350,7 +350,7 @@ lzma_code(lzma_stream *strm, lzma_action action)
 
 
 extern LZMA_API(void)
-lzma_end(lzma_stream *strm)
+bcc_lzma_end(lzma_stream *strm)
 {
 	if (strm != NULL && strm->internal != NULL) {
 		lzma_next_end(&strm->internal->next, strm->allocator);

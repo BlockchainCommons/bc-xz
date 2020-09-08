@@ -177,7 +177,7 @@ extern LZMA_API(lzma_bool) lzma_mode_is_supported(lzma_mode mode)
  * Since LZMA1 and LZMA2 share most of the code, it's simplest to share
  * the options structure too. For encoding, all but the reserved variables
  * need to be initialized unless specifically mentioned otherwise.
- * lzma_lzma_preset() can be used to get a good starting point.
+ * bcc_lzma_lzma_preset() can be used to get a good starting point.
  *
  * For raw decoding, both LZMA1 and LZMA2 need dict_size, preset_dict, and
  * preset_dict_size (if preset_dict != NULL). LZMA1 needs also lc, lp, and pb.
@@ -416,5 +416,5 @@ typedef struct {
  * \return      On success, false is returned. If the preset is not
  *              supported, true is returned.
  */
-extern LZMA_API(lzma_bool) lzma_lzma_preset(
+extern LZMA_API(lzma_bool) bcc_lzma_lzma_preset(
 		lzma_options_lzma *options, uint32_t preset) lzma_nothrow;

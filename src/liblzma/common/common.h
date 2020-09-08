@@ -82,8 +82,8 @@
 
 
 /// Special return value (lzma_ret) to indicate that a timeout was reached
-/// and lzma_code() must not return LZMA_BUF_ERROR. This is converted to
-/// LZMA_OK in lzma_code(). This is not in the lzma_ret enumeration because
+/// and bcc_lzma_code() must not return LZMA_BUF_ERROR. This is converted to
+/// LZMA_OK in bcc_lzma_code(). This is not in the lzma_ret enumeration because
 /// there's no need to have it in the public API.
 #define LZMA_TIMED_OUT 32
 
@@ -191,7 +191,7 @@ struct lzma_next_coder_s {
 	}
 
 
-/// Internal data for lzma_strm_init, lzma_code, and lzma_end. A pointer to
+/// Internal data for lzma_strm_init, bcc_lzma_code, and bcc_lzma_end. A pointer to
 /// this is stored in lzma_stream.
 struct lzma_internal_s {
 	/// The actual coder that should do something useful
@@ -199,7 +199,7 @@ struct lzma_internal_s {
 
 	/// Track the state of the coder. This is used to validate arguments
 	/// so that the actual coders can rely on e.g. that LZMA_SYNC_FLUSH
-	/// is used on every call to lzma_code until next.code has returned
+	/// is used on every call to bcc_lzma_code until next.code has returned
 	/// LZMA_STREAM_END.
 	enum {
 		ISEQ_RUN,
@@ -219,7 +219,7 @@ struct lzma_internal_s {
 	/// Indicates which lzma_action values are allowed by next.code.
 	bool supported_actions[LZMA_ACTION_MAX + 1];
 
-	/// If true, lzma_code will return LZMA_BUF_ERROR if no progress was
+	/// If true, bcc_lzma_code will return LZMA_BUF_ERROR if no progress was
 	/// made (no input consumed and no output produced by next.code).
 	bool allow_buf_error;
 };
@@ -306,7 +306,7 @@ do { \
 	const lzma_ret ret_ = func(&(strm)->internal->next, \
 			(strm)->allocator, __VA_ARGS__); \
 	if (ret_ != LZMA_OK) { \
-		lzma_end(strm); \
+		bcc_lzma_end(strm); \
 		return ret_; \
 	} \
 } while (0)

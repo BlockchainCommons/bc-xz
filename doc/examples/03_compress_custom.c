@@ -27,12 +27,12 @@ init_encoder(lzma_stream *strm)
 {
 	// Use the default preset (6) for LZMA2.
 	//
-	// The lzma_options_lzma structure and the lzma_lzma_preset() function
+	// The lzma_options_lzma structure and the bcc_lzma_lzma_preset() function
 	// are declared in lzma/lzma12.h (src/liblzma/api/lzma/lzma12.h in the
 	// source package or e.g. /usr/include/lzma/lzma12.h depending on
 	// the install prefix).
 	lzma_options_lzma opt_lzma2;
-	if (lzma_lzma_preset(&opt_lzma2, LZMA_PRESET_DEFAULT)) {
+	if (bcc_lzma_lzma_preset(&opt_lzma2, LZMA_PRESET_DEFAULT)) {
 		// It should never fail because the default preset
 		// (and presets 0-9 optionally with LZMA_PRESET_EXTREME)
 		// are supported by all stable liblzma versions.
@@ -130,7 +130,7 @@ compress(lzma_stream *strm, FILE *infile, FILE *outfile)
 				action = LZMA_FINISH;
 		}
 
-		lzma_ret ret = lzma_code(strm, action);
+		lzma_ret ret = bcc_lzma_code(strm, action);
 
 		if (strm->avail_out == 0 || ret == LZMA_STREAM_END) {
 			size_t write_size = sizeof(outbuf) - strm->avail_out;
@@ -182,7 +182,7 @@ main(void)
 	if (success)
 		success = compress(&strm, stdin, stdout);
 
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	if (fclose(stdout)) {
 		fprintf(stderr, "Write error: %s\n", strerror(errno));

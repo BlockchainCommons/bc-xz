@@ -585,10 +585,10 @@ extern LZMA_API(lzma_index *) lzma_index_dup(
  * \param       strm        Pointer to properly prepared lzma_stream
  * \param       i           Pointer to lzma_index which should be encoded.
  *
- * The valid `action' values for lzma_code() are LZMA_RUN and LZMA_FINISH.
+ * The valid `action' values for bcc_lzma_code() are LZMA_RUN and LZMA_FINISH.
  * It is enough to use only one of them (you can choose freely).
  *
- * \return      - LZMA_OK: Initialization succeeded, continue with lzma_code().
+ * \return      - LZMA_OK: Initialization succeeded, continue with bcc_lzma_code().
  *              - LZMA_MEM_ERROR
  *              - LZMA_PROG_ERROR
  */
@@ -604,7 +604,7 @@ extern LZMA_API(lzma_ret) lzma_index_encoder(
  * \param       i           The decoded Index will be made available via
  *                          this pointer. Initially this function will
  *                          set *i to NULL (the old value is ignored). If
- *                          decoding succeeds (lzma_code() returns
+ *                          decoding succeeds (bcc_lzma_code() returns
  *                          LZMA_STREAM_END), *i will be set to point
  *                          to a new lzma_index, which the application
  *                          has to later free with lzma_index_end().
@@ -613,11 +613,11 @@ extern LZMA_API(lzma_ret) lzma_index_encoder(
  *                          don't allow 0 here and return LZMA_PROG_ERROR;
  *                          later versions treat 0 as if 1 had been specified.
  *
- * Valid `action' arguments to lzma_code() are LZMA_RUN and LZMA_FINISH.
+ * Valid `action' arguments to bcc_lzma_code() are LZMA_RUN and LZMA_FINISH.
  * There is no need to use LZMA_FINISH, but it's allowed because it may
  * simplify certain types of applications.
  *
- * \return      - LZMA_OK: Initialization succeeded, continue with lzma_code().
+ * \return      - LZMA_OK: Initialization succeeded, continue with bcc_lzma_code().
  *              - LZMA_MEM_ERROR
  *              - LZMA_PROG_ERROR
  *

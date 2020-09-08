@@ -108,7 +108,7 @@ static bool
 compress(lzma_stream *strm, FILE *infile, FILE *outfile)
 {
 	// This will be LZMA_RUN until the end of the input file is reached.
-	// This tells lzma_code() when there will be no more input.
+	// This tells bcc_lzma_code() when there will be no more input.
 	lzma_action action = LZMA_RUN;
 
 	// Buffers to temporarily hold uncompressed input
@@ -148,7 +148,7 @@ compress(lzma_stream *strm, FILE *infile, FILE *outfile)
 			}
 
 			// Once the end of the input file has been reached,
-			// we need to tell lzma_code() that no more input
+			// we need to tell bcc_lzma_code() that no more input
 			// will be coming and that it should finish the
 			// encoding.
 			if (feof(infile))
@@ -170,13 +170,13 @@ compress(lzma_stream *strm, FILE *infile, FILE *outfile)
 		// The encoder has to do internal buffering, which means that
 		// it may take quite a bit of input before the same data is
 		// available in compressed form in the output buffer.
-		lzma_ret ret = lzma_code(strm, action);
+		lzma_ret ret = bcc_lzma_code(strm, action);
 
 		// If the output buffer is full or if the compression finished
 		// successfully, write the data from the output bufffer to
 		// the output file.
 		if (strm->avail_out == 0 || ret == LZMA_STREAM_END) {
-			// When lzma_code() has returned LZMA_STREAM_END,
+			// When bcc_lzma_code() has returned LZMA_STREAM_END,
 			// the output buffer is likely to be only partially
 			// full. Calculate how much new data there is to
 			// be written to the output file.
@@ -194,11 +194,11 @@ compress(lzma_stream *strm, FILE *infile, FILE *outfile)
 			strm->avail_out = sizeof(outbuf);
 		}
 
-		// Normally the return value of lzma_code() will be LZMA_OK
+		// Normally the return value of bcc_lzma_code() will be LZMA_OK
 		// until everything has been encoded.
 		if (ret != LZMA_OK) {
 			// Once everything has been encoded successfully, the
-			// return value of lzma_code() will be LZMA_STREAM_END.
+			// return value of bcc_lzma_code() will be LZMA_STREAM_END.
 			//
 			// It is important to check for LZMA_STREAM_END. Do not
 			// assume that getting ret != LZMA_OK would mean that
@@ -282,9 +282,9 @@ main(int argc, char **argv)
 	// multiple files, this would only need to be done after the last
 	// file. See 02_decompress.c for handling of multiple files.
 	//
-	// It is OK to call lzma_end() multiple times or when it hasn't been
+	// It is OK to call bcc_lzma_end() multiple times or when it hasn't been
 	// actually used except initialized with LZMA_STREAM_INIT.
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	// Close stdout to catch possible write errors that can occur
 	// when pending data is flushed from the stdio buffers.

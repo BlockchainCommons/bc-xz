@@ -84,7 +84,7 @@ coder_loop(lzma_stream *strm, uint8_t *in, size_t in_size,
 			strm->avail_out = 1;
 		}
 
-		ret = lzma_code(strm, action);
+		ret = bcc_lzma_code(strm, action);
 		if (ret != LZMA_OK)
 			break;
 	}

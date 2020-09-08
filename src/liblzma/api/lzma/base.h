@@ -82,7 +82,7 @@ typedef enum {
 		 * the decoding can be continued normally.
 		 *
 		 * It is possible to call lzma_get_check() immediately after
-		 * lzma_code has returned LZMA_NO_CHECK. The result will
+		 * bcc_lzma_code has returned LZMA_NO_CHECK. The result will
 		 * naturally be LZMA_CHECK_NONE, but the possibility to call
 		 * lzma_get_check() may be convenient in some applications.
 		 */
@@ -99,7 +99,7 @@ typedef enum {
 		 * encoding cannot be done, because there's no way to produce
 		 * output with the correct integrity check.
 		 *
-		 * Decoders can return this value only from lzma_code() and
+		 * Decoders can return this value only from bcc_lzma_code() and
 		 * only if the LZMA_TELL_UNSUPPORTED_CHECK flag was used when
 		 * initializing the decoder. The decoding can still be
 		 * continued normally even if the check type is unsupported,
@@ -107,7 +107,7 @@ typedef enum {
 		 * errors may go undetected.
 		 *
 		 * With decoder, it is possible to call lzma_get_check()
-		 * immediately after lzma_code() has returned
+		 * immediately after bcc_lzma_code() has returned
 		 * LZMA_UNSUPPORTED_CHECK. This way it is possible to find
 		 * out what the unsupported Check ID was.
 		 */
@@ -116,7 +116,7 @@ typedef enum {
 		/**<
 		 * \brief       Integrity check type is now available
 		 *
-		 * This value can be returned only by the lzma_code() function
+		 * This value can be returned only by the bcc_lzma_code() function
 		 * and only if the decoder was initialized with the
 		 * LZMA_TELL_ANY_CHECK flag. LZMA_GET_CHECK tells the
 		 * application that it may now call lzma_get_check() to find
@@ -201,7 +201,7 @@ typedef enum {
 		 * by providing more input and/or more output space, if
 		 * possible.
 		 *
-		 * Typically the first call to lzma_code() that can do no
+		 * Typically the first call to bcc_lzma_code() that can do no
 		 * progress returns LZMA_OK instead of LZMA_BUF_ERROR. Only
 		 * the second consecutive call doing no progress will return
 		 * LZMA_BUF_ERROR. This is intentional.
@@ -224,9 +224,9 @@ typedef enum {
 		 *   - Function arguments are invalid or the structures
 		 *     pointed by the argument pointers are invalid
 		 *     e.g. if strm->next_out has been set to NULL and
-		 *     strm->avail_out > 0 when calling lzma_code().
+		 *     strm->avail_out > 0 when calling bcc_lzma_code().
 		 *   - lzma_* functions have been called in wrong order
-		 *     e.g. lzma_code() was called right after lzma_end().
+		 *     e.g. bcc_lzma_code() was called right after bcc_lzma_end().
 		 *   - If errors occur randomly, the reason might be flaky
 		 *     hardware.
 		 *
@@ -238,14 +238,14 @@ typedef enum {
 
 
 /**
- * \brief       The `action' argument for lzma_code()
+ * \brief       The `action' argument for bcc_lzma_code()
  *
  * After the first use of LZMA_SYNC_FLUSH, LZMA_FULL_FLUSH, LZMA_FULL_BARRIER,
- * or LZMA_FINISH, the same `action' must is used until lzma_code() returns
+ * or LZMA_FINISH, the same `action' must is used until bcc_lzma_code() returns
  * LZMA_STREAM_END. Also, the amount of input (that is, strm->avail_in) must
- * not be modified by the application until lzma_code() returns
+ * not be modified by the application until bcc_lzma_code() returns
  * LZMA_STREAM_END. Changing the `action' or modifying the amount of input
- * will make lzma_code() return LZMA_PROG_ERROR.
+ * will make bcc_lzma_code() return LZMA_PROG_ERROR.
  */
 typedef enum {
 	LZMA_RUN = 0,
@@ -256,7 +256,7 @@ typedef enum {
 		 * buffering will probably be done (depends on the filter
 		 * chain in use), which causes latency: the input used won't
 		 * usually be decodeable from the output of the same
-		 * lzma_code() call.
+		 * bcc_lzma_code() call.
 		 *
 		 * Decoder: Decode as much input as possible and produce as
 		 * much output as possible.
@@ -275,7 +275,7 @@ typedef enum {
 		 *
 		 * Only some filters support LZMA_SYNC_FLUSH. Trying to use
 		 * LZMA_SYNC_FLUSH with filters that don't support it will
-		 * make lzma_code() return LZMA_OPTIONS_ERROR. For example,
+		 * make bcc_lzma_code() return LZMA_OPTIONS_ERROR. For example,
 		 * LZMA1 doesn't support LZMA_SYNC_FLUSH but LZMA2 does.
 		 *
 		 * Using LZMA_SYNC_FLUSH very often can dramatically reduce
@@ -293,7 +293,7 @@ typedef enum {
 		 *
 		 * All the input data going to the current Block must have
 		 * been given to the encoder (the last bytes can still be
-		 * pending in *next_in). Call lzma_code() with LZMA_FULL_FLUSH
+		 * pending in *next_in). Call bcc_lzma_code() with LZMA_FULL_FLUSH
 		 * until it returns LZMA_STREAM_END. Then continue normally
 		 * with LZMA_RUN or finish the Stream with LZMA_FINISH.
 		 *
@@ -308,7 +308,7 @@ typedef enum {
 		 *
 		 * This is like LZMA_FULL_FLUSH except that this doesn't
 		 * necessarily wait until all the input has been made
-		 * available via the output buffer. That is, lzma_code()
+		 * available via the output buffer. That is, bcc_lzma_code()
 		 * might return LZMA_STREAM_END as soon as all the input
 		 * has been consumed (avail_in == 0).
 		 *
@@ -317,7 +317,7 @@ typedef enum {
 		 * offsets but doesn't care if the output isn't flushed
 		 * immediately. Using LZMA_FULL_BARRIER allows keeping
 		 * the threads busy while LZMA_FULL_FLUSH would make
-		 * lzma_code() wait until all the threads have finished
+		 * bcc_lzma_code() wait until all the threads have finished
 		 * until more data could be passed to the encoder.
 		 *
 		 * With a lzma_stream initialized with the single-threaded
@@ -331,7 +331,7 @@ typedef enum {
 		 *
 		 * All the input data must have been given to the encoder
 		 * (the last bytes can still be pending in next_in).
-		 * Call lzma_code() with LZMA_FINISH until it returns
+		 * Call bcc_lzma_code() with LZMA_FINISH until it returns
 		 * LZMA_STREAM_END. Once LZMA_FINISH has been used,
 		 * the amount of input must no longer be changed by
 		 * the application.
@@ -364,7 +364,7 @@ typedef enum {
  * Multithreaded mode: liblzma might internally store pointers to the
  * lzma_allocator given via the lzma_stream structure. The application
  * must not change the allocator pointer in lzma_stream or the contents
- * of the pointed lzma_allocator structure until lzma_end() has been used
+ * of the pointed lzma_allocator structure until bcc_lzma_end() has been used
  * to free the memory associated with that lzma_stream. The allocation
  * functions might be called simultaneously from multiple threads, and
  * thus they must be thread safe.
@@ -463,18 +463,18 @@ typedef struct lzma_internal_s lzma_internal;
  *      - The initialization functions always set strm->total_in and
  *        strm->total_out to zero.
  *      - If the initialization function fails, no memory is left allocated
- *        that would require freeing with lzma_end() even if some memory was
+ *        that would require freeing with bcc_lzma_end() even if some memory was
  *        associated with the lzma_stream structure when the initialization
  *        function was called.
  *
- *  - Use lzma_code() to do the actual work.
+ *  - Use bcc_lzma_code() to do the actual work.
  *
  *  - Once the coding has been finished, the existing lzma_stream can be
  *    reused. It is OK to reuse lzma_stream with different initialization
- *    function without calling lzma_end() first. Old allocations are
+ *    function without calling bcc_lzma_end() first. Old allocations are
  *    automatically freed.
  *
- *  - Finally, use lzma_end() to free the allocated memory. lzma_end() never
+ *  - Finally, use bcc_lzma_end() to free the allocated memory. bcc_lzma_end() never
  *    frees the lzma_stream structure itself.
  *
  * Application may modify the values of total_in and total_out as it wants.
@@ -560,7 +560,7 @@ typedef struct {
  * See the description of the coder-specific initialization function to find
  * out what `action' values are supported by the coder.
  */
-extern LZMA_API(lzma_ret) lzma_code(lzma_stream *strm, lzma_action action)
+extern LZMA_API(lzma_ret) bcc_lzma_code(lzma_stream *strm, lzma_action action)
 		lzma_nothrow lzma_attr_warn_unused_result;
 
 
@@ -570,14 +570,14 @@ extern LZMA_API(lzma_ret) lzma_code(lzma_stream *strm, lzma_action action)
  * \param       strm    Pointer to lzma_stream that is at least initialized
  *                      with LZMA_STREAM_INIT.
  *
- * After lzma_end(strm), strm->internal is guaranteed to be NULL. No other
+ * After bcc_lzma_end(strm), strm->internal is guaranteed to be NULL. No other
  * members of the lzma_stream structure are touched.
  *
  * \note        zlib indicates an error if application end()s unfinished
  *              stream structure. liblzma doesn't do this, and assumes that
  *              application knows what it is doing.
  */
-extern LZMA_API(void) lzma_end(lzma_stream *strm) lzma_nothrow;
+extern LZMA_API(void) bcc_lzma_end(lzma_stream *strm) lzma_nothrow;
 
 
 /**

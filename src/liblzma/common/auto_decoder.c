@@ -55,7 +55,7 @@ auto_decode(void *coder_ptr, const lzma_allocator *allocator,
 					&coder->next, allocator,
 					coder->memlimit, coder->flags));
 		} else {
-			return_if_error(lzma_alone_decoder_init(&coder->next,
+			return_if_error(bcc_lzma_alone_decoder_init(&coder->next,
 					allocator, coder->memlimit, true));
 
 			// If the application wants to know about missing

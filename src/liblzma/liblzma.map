@@ -1,7 +1,7 @@
 XZ_5.0 {
 global:
-	lzma_alone_decoder;
-	lzma_alone_encoder;
+	bcc_lzma_alone_decoder;
+	bcc_lzma_alone_encoder;
 	lzma_auto_decoder;
 	lzma_block_buffer_bound;
 	lzma_block_buffer_decode;
@@ -16,14 +16,14 @@ global:
 	lzma_block_unpadded_size;
 	lzma_check_is_supported;
 	lzma_check_size;
-	lzma_code;
+	bcc_lzma_code;
 	lzma_crc32;
 	lzma_crc64;
 	lzma_easy_buffer_encode;
-	lzma_easy_decoder_memusage;
+	bcc_lzma_easy_decoder_memusage;
 	lzma_easy_encoder;
-	lzma_easy_encoder_memusage;
-	lzma_end;
+	bcc_lzma_easy_encoder_memusage;
+	bcc_lzma_end;
 	lzma_filter_decoder_is_supported;
 	lzma_filter_encoder_is_supported;
 	lzma_filter_flags_decode;
@@ -62,7 +62,7 @@ global:
 	lzma_index_stream_size;
 	lzma_index_total_size;
 	lzma_index_uncompressed_size;
-	lzma_lzma_preset;
+	bcc_lzma_lzma_preset;
 	lzma_memlimit_get;
 	lzma_memlimit_set;
 	lzma_memusage;

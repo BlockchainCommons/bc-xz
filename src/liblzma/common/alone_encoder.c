@@ -143,7 +143,7 @@ alone_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 
 /*
 extern lzma_ret
-lzma_alone_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
+bcc_lzma_alone_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 		const lzma_options_alone *options)
 {
 	lzma_next_coder_init(&alone_encoder_init, next, allocator, options);
@@ -152,7 +152,7 @@ lzma_alone_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 
 
 extern LZMA_API(lzma_ret)
-lzma_alone_encoder(lzma_stream *strm, const lzma_options_lzma *options)
+bcc_lzma_alone_encoder(lzma_stream *strm, const lzma_options_lzma *options)
 {
 	lzma_next_strm_init(alone_encoder_init, strm, options);
 

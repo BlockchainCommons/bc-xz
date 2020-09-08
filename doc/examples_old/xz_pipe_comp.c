@@ -95,10 +95,10 @@ int xz_compress (FILE *in_file, FILE *out_file)
 			strm.avail_out = OUT_BUF_MAX;
 
 			/* compress data */
-			ret_xz = lzma_code (&strm, action);
+			ret_xz = bcc_lzma_code (&strm, action);
 
 			if ((ret_xz != LZMA_OK) && (ret_xz != LZMA_STREAM_END)) {
-				fprintf (stderr, "lzma_code error: %d\n", (int) ret_xz);
+				fprintf (stderr, "bcc_lzma_code error: %d\n", (int) ret_xz);
 				out_finished = true;
 				ret = RET_ERROR_COMPRESSION;
 			} else {
@@ -113,7 +113,7 @@ int xz_compress (FILE *in_file, FILE *out_file)
 		} while (strm.avail_out == 0);
 	}
 
-	lzma_end (&strm);
+	bcc_lzma_end (&strm);
 	return ret;
 }
 

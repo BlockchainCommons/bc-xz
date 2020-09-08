@@ -16,7 +16,7 @@
 #include "common.h"
 
 
-extern lzma_ret lzma_alone_decoder_init(
+extern lzma_ret bcc_lzma_alone_decoder_init(
 		lzma_next_coder *next, const lzma_allocator *allocator,
 		uint64_t memlimit, bool picky);
 

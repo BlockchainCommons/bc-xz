@@ -83,10 +83,10 @@ int xz_decompress (FILE *in_file, FILE *out_file)
 			strm.avail_out = OUT_BUF_MAX;
 
 			/* decompress data */
-			ret_xz = lzma_code (&strm, action);
+			ret_xz = bcc_lzma_code (&strm, action);
 
 			if ((ret_xz != LZMA_OK) && (ret_xz != LZMA_STREAM_END)) {
-				fprintf (stderr, "lzma_code error: %d\n", (int) ret_xz);
+				fprintf (stderr, "bcc_lzma_code error: %d\n", (int) ret_xz);
 				out_finished = true;
 				ret = RET_ERROR_DECOMPRESSION;
 			} else {
@@ -102,14 +102,14 @@ int xz_decompress (FILE *in_file, FILE *out_file)
 	}
 
 	/* Bug fix (2012-06-14): If no errors were detected, check
-	   that the last lzma_code() call returned LZMA_STREAM_END.
+	   that the last bcc_lzma_code() call returned LZMA_STREAM_END.
 	   If not, the file is probably truncated. */
 	if ((ret == RET_OK) && (ret_xz != LZMA_STREAM_END)) {
 		fprintf (stderr, "Input truncated or corrupt\n");
 		ret = RET_ERROR_DECOMPRESSION;
 	}
 
-	lzma_end (&strm);
+	bcc_lzma_end (&strm);
 	return ret;
 }
 

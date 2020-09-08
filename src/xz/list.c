@@ -285,7 +285,7 @@ parse_indexes(xz_file_info *xfi, file_pair *pair)
 			index_size -= strm.avail_in;
 
 			strm.next_in = buf.u8;
-			ret = lzma_code(&strm, LZMA_RUN);
+			ret = bcc_lzma_code(&strm, LZMA_RUN);
 
 		} while (ret == LZMA_OK);
 
@@ -382,7 +382,7 @@ parse_indexes(xz_file_info *xfi, file_pair *pair)
 
 	} while (pos > 0);
 
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	// All OK. Make combined_index available to the caller.
 	xfi->idx = combined_index;
@@ -390,7 +390,7 @@ parse_indexes(xz_file_info *xfi, file_pair *pair)
 
 error:
 	// Something went wrong, free the allocated memory.
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 	lzma_index_end(combined_index, NULL);
 	lzma_index_end(this_index, NULL);
 	return true;

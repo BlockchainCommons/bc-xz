@@ -33,7 +33,7 @@ compress(void)
 	// it has fixed 4-byte alignment which makes triggering the potential
 	// bug easy.
 	lzma_options_lzma opt_lzma2;
-	succeed(lzma_lzma_preset(&opt_lzma2, 0));
+	succeed(bcc_lzma_lzma_preset(&opt_lzma2, 0));
 
 	lzma_filter filters[3] = {
 		{ .id = LZMA_FILTER_POWERPC, .options = NULL },
@@ -61,11 +61,11 @@ decompress(void)
 		if (strm.total_in < compressed_size)
 			strm.avail_in = 1;
 
-		const lzma_ret ret = lzma_code(&strm, LZMA_RUN);
+		const lzma_ret ret = bcc_lzma_code(&strm, LZMA_RUN);
 		if (ret == LZMA_STREAM_END) {
 			expect(strm.total_in == compressed_size);
 			expect(strm.total_out == sizeof(in));
-			lzma_end(&strm);
+			bcc_lzma_end(&strm);
 			return;
 		}
 

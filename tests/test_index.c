@@ -231,7 +231,7 @@ test_code(lzma_index *i)
 	expect(is_equal(i, d));
 
 	lzma_index_end(d, NULL);
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	// Decode with hashing
 	lzma_index_hash *h = lzma_index_hash_init(NULL, NULL);
@@ -625,7 +625,7 @@ test_corrupt(void)
 	expect(lzma_index_decoder(&strm, &i, MEMLIMIT) == LZMA_OK);
 	succeed(decoder_loop_ret(&strm, buf, 16, LZMA_DATA_ERROR));
 
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 	free(buf);
 }
 

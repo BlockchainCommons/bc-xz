@@ -82,7 +82,7 @@ typedef struct {
 	 * \brief       Maximum uncompressed size of a Block
 	 *
 	 * The encoder will start a new .xz Block every block_size bytes.
-	 * Using LZMA_FULL_FLUSH or LZMA_FULL_BARRIER with lzma_code()
+	 * Using LZMA_FULL_FLUSH or LZMA_FULL_BARRIER with bcc_lzma_code()
 	 * the caller may tell liblzma to start a new Block earlier.
 	 *
 	 * With LZMA2, a recommended block size is 2-4 times the LZMA2
@@ -104,31 +104,31 @@ typedef struct {
 	uint64_t block_size;
 
 	/**
-	 * \brief       Timeout to allow lzma_code() to return early
+	 * \brief       Timeout to allow bcc_lzma_code() to return early
 	 *
 	 * Multithreading can make liblzma to consume input and produce
 	 * output in a very bursty way: it may first read a lot of input
 	 * to fill internal buffers, then no input or output occurs for
 	 * a while.
 	 *
-	 * In single-threaded mode, lzma_code() won't return until it has
+	 * In single-threaded mode, bcc_lzma_code() won't return until it has
 	 * either consumed all the input or filled the output buffer. If
 	 * this is done in multithreaded mode, it may cause a call
-	 * lzma_code() to take even tens of seconds, which isn't acceptable
+	 * bcc_lzma_code() to take even tens of seconds, which isn't acceptable
 	 * in all applications.
 	 *
-	 * To avoid very long blocking times in lzma_code(), a timeout
-	 * (in milliseconds) may be set here. If lzma_code() would block
+	 * To avoid very long blocking times in bcc_lzma_code(), a timeout
+	 * (in milliseconds) may be set here. If bcc_lzma_code() would block
 	 * longer than this number of milliseconds, it will return with
 	 * LZMA_OK. Reasonable values are 100 ms or more. The xz command
 	 * line tool uses 300 ms.
 	 *
 	 * If long blocking times are fine for you, set timeout to a special
 	 * value of 0, which will disable the timeout mechanism and will make
-	 * lzma_code() block until all the input is consumed or the output
+	 * bcc_lzma_code() block until all the input is consumed or the output
 	 * buffer has been filled.
 	 *
-	 * \note        Even with a timeout, lzma_code() might sometimes take
+	 * \note        Even with a timeout, bcc_lzma_code() might sometimes take
 	 *              somewhat long time to return. No timing guarantees
 	 *              are made.
 	 */
@@ -196,7 +196,7 @@ typedef struct {
  *              preset when encoding. If an error occurs, for example
  *              due to unsupported preset, UINT64_MAX is returned.
  */
-extern LZMA_API(uint64_t) lzma_easy_encoder_memusage(uint32_t preset)
+extern LZMA_API(uint64_t) bcc_lzma_easy_encoder_memusage(uint32_t preset)
 		lzma_nothrow lzma_attr_pure;
 
 
@@ -212,7 +212,7 @@ extern LZMA_API(uint64_t) lzma_easy_encoder_memusage(uint32_t preset)
  *              occurs, for example due to unsupported preset, UINT64_MAX
  *              is returned.
  */
-extern LZMA_API(uint64_t) lzma_easy_decoder_memusage(uint32_t preset)
+extern LZMA_API(uint64_t) bcc_lzma_easy_decoder_memusage(uint32_t preset)
 		lzma_nothrow lzma_attr_pure;
 
 
@@ -236,7 +236,7 @@ extern LZMA_API(uint64_t) lzma_easy_decoder_memusage(uint32_t preset)
  *                      unsure. LZMA_CHECK_CRC32 is good too as long as the
  *                      uncompressed file is not many gigabytes.
  *
- * \return      - LZMA_OK: Initialization succeeded. Use lzma_code() to
+ * \return      - LZMA_OK: Initialization succeeded. Use bcc_lzma_code() to
  *                encode your data.
  *              - LZMA_MEM_ERROR: Memory allocation failed.
  *              - LZMA_OPTIONS_ERROR: The given compression preset is not
@@ -248,10 +248,10 @@ extern LZMA_API(uint64_t) lzma_easy_decoder_memusage(uint32_t preset)
  *
  * If initialization fails (return value is not LZMA_OK), all the memory
  * allocated for *strm by liblzma is always freed. Thus, there is no need
- * to call lzma_end() after failed initialization.
+ * to call bcc_lzma_end() after failed initialization.
  *
- * If initialization succeeds, use lzma_code() to do the actual encoding.
- * Valid values for `action' (the second argument of lzma_code()) are
+ * If initialization succeeds, use bcc_lzma_code() to do the actual encoding.
+ * Valid values for `action' (the second argument of bcc_lzma_code()) are
  * LZMA_RUN, LZMA_SYNC_FLUSH, LZMA_FULL_FLUSH, and LZMA_FINISH. In future,
  * there may be compression levels or flags that don't support LZMA_SYNC_FLUSH.
  */
@@ -321,7 +321,7 @@ extern LZMA_API(lzma_ret) lzma_stream_encoder(lzma_stream *strm,
  *
  * Since doing the encoding in threaded mode doesn't affect the memory
  * requirements of single-threaded decompressor, you can use
- * lzma_easy_decoder_memusage(options->preset) or
+ * bcc_lzma_easy_decoder_memusage(options->preset) or
  * lzma_raw_decoder_memusage(options->filters) to calculate
  * the decompressor memory requirements.
  *
@@ -341,7 +341,7 @@ extern LZMA_API(uint64_t) lzma_stream_encoder_mt_memusage(
  * This provides the functionality of lzma_easy_encoder() and
  * lzma_stream_encoder() as a single function for multithreaded use.
  *
- * The supported actions for lzma_code() are LZMA_RUN, LZMA_FULL_FLUSH,
+ * The supported actions for bcc_lzma_code() are LZMA_RUN, LZMA_FULL_FLUSH,
  * LZMA_FULL_BARRIER, and LZMA_FINISH. Support for LZMA_SYNC_FLUSH might be
  * added in the future.
  *
@@ -370,7 +370,7 @@ extern LZMA_API(lzma_ret) lzma_stream_encoder_mt(
  * legacy LZMA tools such as LZMA Utils 4.32.x. Moving to the .xz format
  * is strongly recommended.
  *
- * The valid action values for lzma_code() are LZMA_RUN and LZMA_FINISH.
+ * The valid action values for bcc_lzma_code() are LZMA_RUN and LZMA_FINISH.
  * No kind of flushing is supported, because the file format doesn't make
  * it possible.
  *
@@ -379,7 +379,7 @@ extern LZMA_API(lzma_ret) lzma_stream_encoder_mt(
  *              - LZMA_OPTIONS_ERROR
  *              - LZMA_PROG_ERROR
  */
-extern LZMA_API(lzma_ret) lzma_alone_encoder(
+extern LZMA_API(lzma_ret) bcc_lzma_alone_encoder(
 		lzma_stream *strm, const lzma_options_lzma *options)
 		lzma_nothrow lzma_attr_warn_unused_result;
 
@@ -449,7 +449,7 @@ extern LZMA_API(lzma_ret) lzma_stream_buffer_encode(
  ************/
 
 /**
- * This flag makes lzma_code() return LZMA_NO_CHECK if the input stream
+ * This flag makes bcc_lzma_code() return LZMA_NO_CHECK if the input stream
  * being decoded has no integrity check. Note that when used with
  * lzma_auto_decoder(), all .lzma files will trigger LZMA_NO_CHECK
  * if LZMA_TELL_NO_CHECK is used.
@@ -458,7 +458,7 @@ extern LZMA_API(lzma_ret) lzma_stream_buffer_encode(
 
 
 /**
- * This flag makes lzma_code() return LZMA_UNSUPPORTED_CHECK if the input
+ * This flag makes bcc_lzma_code() return LZMA_UNSUPPORTED_CHECK if the input
  * stream has an integrity check, but the type of the integrity check is not
  * supported by this liblzma version or build. Such files can still be
  * decoded, but the integrity check cannot be verified.
@@ -467,7 +467,7 @@ extern LZMA_API(lzma_ret) lzma_stream_buffer_encode(
 
 
 /**
- * This flag makes lzma_code() return LZMA_GET_CHECK as soon as the type
+ * This flag makes bcc_lzma_code() return LZMA_GET_CHECK as soon as the type
  * of the integrity check is known. The type can then be got with
  * lzma_get_check().
  */
@@ -475,7 +475,7 @@ extern LZMA_API(lzma_ret) lzma_stream_buffer_encode(
 
 
 /**
- * This flag makes lzma_code() not calculate and verify the integrity check
+ * This flag makes bcc_lzma_code() not calculate and verify the integrity check
  * of the compressed data in .xz files. This means that invalid integrity
  * check values won't be detected and LZMA_DATA_ERROR won't be returned in
  * such cases.
@@ -504,13 +504,13 @@ extern LZMA_API(lzma_ret) lzma_stream_buffer_encode(
  * supported by liblzma, only the .xz format allows concatenated files.
  * Concatenated files are not allowed with the legacy .lzma format.
  *
- * This flag also affects the usage of the `action' argument for lzma_code().
- * When LZMA_CONCATENATED is used, lzma_code() won't return LZMA_STREAM_END
+ * This flag also affects the usage of the `action' argument for bcc_lzma_code().
+ * When LZMA_CONCATENATED is used, bcc_lzma_code() won't return LZMA_STREAM_END
  * unless LZMA_FINISH is used as `action'. Thus, the application has to set
  * LZMA_FINISH in the same way as it does when encoding.
  *
  * If LZMA_CONCATENATED is not used, the decoders still accept LZMA_FINISH
- * as `action' for lzma_code(), but the usage of LZMA_FINISH isn't required.
+ * as `action' for bcc_lzma_code(), but the usage of LZMA_FINISH isn't required.
  */
 #define LZMA_CONCATENATED               UINT32_C(0x08)
 
@@ -542,7 +542,7 @@ extern LZMA_API(lzma_ret) lzma_stream_decoder(
  * \brief       Decode .xz Streams and .lzma files with autodetection
  *
  * This decoder autodetects between the .xz and .lzma file formats, and
- * calls lzma_stream_decoder() or lzma_alone_decoder() once the type
+ * calls lzma_stream_decoder() or bcc_lzma_alone_decoder() once the type
  * of the input file has been detected.
  *
  * \param       strm        Pointer to properly prepared lzma_stream
@@ -573,7 +573,7 @@ extern LZMA_API(lzma_ret) lzma_auto_decoder(
  *                          LZMA_PROG_ERROR; later versions treat 0 as if 1
  *                          had been specified.
  *
- * Valid `action' arguments to lzma_code() are LZMA_RUN and LZMA_FINISH.
+ * Valid `action' arguments to bcc_lzma_code() are LZMA_RUN and LZMA_FINISH.
  * There is no need to use LZMA_FINISH, but it's allowed because it may
  * simplify certain types of applications.
  *
@@ -581,7 +581,7 @@ extern LZMA_API(lzma_ret) lzma_auto_decoder(
  *              - LZMA_MEM_ERROR
  *              - LZMA_PROG_ERROR
  */
-extern LZMA_API(lzma_ret) lzma_alone_decoder(
+extern LZMA_API(lzma_ret) bcc_lzma_alone_decoder(
 		lzma_stream *strm, uint64_t memlimit)
 		lzma_nothrow lzma_attr_warn_unused_result;
 

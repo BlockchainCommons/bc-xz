@@ -42,7 +42,7 @@ main(void)
 
 	// Filter setup
 	lzma_options_lzma opt_lzma;
-	if (lzma_lzma_preset(&opt_lzma, 1))
+	if (bcc_lzma_lzma_preset(&opt_lzma, 1))
 		return 1;
 
 	lzma_filter filters[] = {
@@ -78,7 +78,7 @@ main(void)
 	strm.next_out = out + out_size;
 	strm.avail_out = BUFFER_SIZE - out_size;
 
-	if (lzma_code(&strm, LZMA_FINISH) != LZMA_STREAM_END)
+	if (bcc_lzma_code(&strm, LZMA_FINISH) != LZMA_STREAM_END)
 		return 1;
 
 	out_size += strm.total_out;
@@ -98,12 +98,12 @@ main(void)
 	if (lzma_index_encoder(&strm, idx) != LZMA_OK)
 		return 1;
 
-	if (lzma_code(&strm, LZMA_RUN) != LZMA_STREAM_END)
+	if (bcc_lzma_code(&strm, LZMA_RUN) != LZMA_STREAM_END)
 		return 1;
 
 	out_size += strm.total_out;
 
-	lzma_end(&strm);
+	bcc_lzma_end(&strm);
 
 	lzma_index_end(idx, NULL);
 
